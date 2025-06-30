@@ -4,7 +4,7 @@ import numpy as np
 
 class Kurvendiskussion:
     def __init__(self, funktion, variable):
-        #Funktion und Variablen initialisieren
+        #Initialize function and variable
         self.funktion = funktion
         self.variable = variable
         self.erste_ableitung = None
@@ -12,37 +12,41 @@ class Kurvendiskussion:
         self.dritte_ableitung = None
 
 
-#------------ SCHNITTPUNKT MIT KOORDINATENACHSE ------------
-    #x-Achsenschnittpunkte
+#------------ INTERCEPTS ------------
+    # Calculate x-intercepts (roots of the function)
     def nullstellen(self):
         nullstellen = sp.solve(self.funktion, self.variable)
         return {'Nullstellen' : nullstellen}
 
 
 
-    #Y-Achsenabschnitt
+    # Calculate y-intercept (f(0))
     def berechne_y_achsenabschnitt(self):
         y_achsenabschnitt = self.funktion.subs(self.variable,0) #berechnet den y-Achsenabschnitt
         return {'y-Achsenabschnitt': [y_achsenabschnitt]}
 
 
-#------------ ABLEITUNGEN ------------
+#------------ DERIVATIVES ------------
+    #First order
     def berechne_erste_ableitung(self):
         if self.erste_ableitung is None:
             self.erste_ableitung = sp.diff(self.funktion,self.variable)
         return self.erste_ableitung
-
+    #Second order
     def berechne_zweite_ableitung(self):
         if self.zweite_ableitung is None:
             self.zweite_ableitung = sp.diff(self.funktion,self.variable,2)
         return self.zweite_ableitung
-
+        
+    #Third Order
     def berechne_dritte_ableitung(self):
         if self.dritte_ableitung is None:
             self.dritte_ableitung = sp.diff(self.funktion,self.variable,3)
         return self.dritte_ableitung
 
+    #Display of derivatives
     def ableitungen_anzeigen(self, welche_ableitungen):
+        # Return requested derivatives in LaTeX format
         ableitungen = {}
         if 'erste' in welche_ableitungen:
             ableitungen['erste_ableitung'] = sp.latex(self.berechne_erste_ableitung())
@@ -52,28 +56,24 @@ class Kurvendiskussion:
             ableitungen['dritte_ableitung'] = sp.latex(self.berechne_dritte_ableitung())
         return ableitungen
 
-#------------ EXTREMPUNKTE ------------
+#------------ EXTRMA ------------
 
-#Extremstellen - notwendige Bedingung
-
+    # Find critical points: f'(x) = 0
     def berechne_extremstellen(self):
         # Stelle sicher, dass die erste Ableitung berechnet wurde
         if self.erste_ableitung is None:
             self.berechne_erste_ableitung()  # Berechnet die erste Ableitung
 
-        # Finde die Nullstellen der ersten Ableitung
         extremstellen = sp.solve(self.erste_ableitung, self.variable)
         return {'extremstellen': extremstellen}
 
 
 
-#hinreichende Bedingung
+    # Use second derivative to classify extrema
     def hinreichende_bedingung_extremstellen(self):
-        # Berechne die Extremstellen (Nullstellen der ersten Ableitung)
         extremstellen = self.berechne_extremstellen()
         extremstellen = [*extremstellen.values()][0]
 
-        # Initialisiere leere Listen für Minima, Maxima und Sattelpunkte
         minima = []
         maxima = []
         sattelpunkte = []
@@ -93,7 +93,7 @@ class Kurvendiskussion:
             else:
                 sattelpunkte.append(punkt)
 
-            # Rückgabe als Dictionary für eine klare Struktur
+            # Return as dictionary
         return {
             "Minima": minima,
             "Maxima": maxima,
@@ -101,9 +101,9 @@ class Kurvendiskussion:
         }
 
 
-#------------ WENDEPUNKTE ------------
+#------------ INFLECTION POINTS ------------
 
-#notwendige Bedingung
+    # Find points where f''(x) = 0
     def berechne_wendepunkte(self):
         # Stelle sicher, dass die erste Ableitung berechnet wurde
         if self.zweite_ableitung is None:
@@ -113,7 +113,7 @@ class Kurvendiskussion:
         wendepunkte = sp.solve(self.zweite_ableitung, self.variable)
         return {'wendepunkte': wendepunkte}
 
-#hinreichende Bedingung
+    # Use third derivative to classify inflection points
     def hinreichende_bedingung_wendepunkte(self):
         # Berechne die Wendepunkte (Nullstellen der zweiten Ableitung)
         wendepunkte = self.berechne_wendepunkte()
@@ -134,7 +134,6 @@ class Kurvendiskussion:
         for punkt in wendepunkte:
             wert_zweite_ableitung = self.dritte_ableitung.subs(self.variable, punkt)
 
-            # Hier die entsprechenden Punkte in die Listen einfügen
             if wert_zweite_ableitung > 0:
                 rl_kruemmung.append(punkt)
             elif wert_zweite_ableitung < 0:
@@ -142,7 +141,7 @@ class Kurvendiskussion:
             else:
                 keine_aussage.append(punkt)
 
-            # Rückgabe als Dictionary für eine klare Struktur
+            # Return as dictionary
         return {
             "Rinks-Rechts-Krümmung": rl_kruemmung,
             "Links-Rechtskrümmung": lr_kruemmung,
@@ -153,9 +152,9 @@ class Kurvendiskussion:
 
 
 
-#------------ ZUSÄTZLICHE SACHEN ------------
+#------------ ADDITIONAL PROPERTIES ------------
 
-    """Vereinfachte Darstellung der Funktion"""
+    """Return simplified function if simplification changes it"""
     def vereinfachte_funktion(self):
         vereinfachte_darstellung = sp.simplify(self.funktion)
         if vereinfachte_darstellung == self.funktion:
@@ -164,7 +163,7 @@ class Kurvendiskussion:
             return{'simplified': None}
 
 
-#------------ SYMMETRIEEIGENSCHAFTEN ------------
+#------------ SYMMETRY ------------
 
     """Symmetrie-Eigenschaften"""
     def symmetrie_eigenschaft(self):
@@ -180,33 +179,34 @@ class Kurvendiskussion:
             #print("Die Funktion weder Achsen- noch Punktsymmetrisch")
             antwort_symmetrie['Symmetrie-Eigenschaft'] = 'weder achsen- noch punktsymmetrisch'
 
-        return antwort_symmetrie        #Wiedergabe der Symmetrie-Eigenschaft mit key 'Symmetrie-Eigenschaft'
+        return antwort_symmetrie
 
 
-#------------ POLSTELLEN ------------
+#------------ POLES ------------
 
+    # Check if function has a variable in the denominator
     def ist_es_ein_bruch(self):
         zaehler, nenner = self.funktion.as_numer_denom()
         if nenner.has(self.variable):
             return nenner
-        return None  # Klarheit, dass es kein Bruch ist
+        return None
 
+    # Check for poles
     def finde_polstellen(self):
         nenner = self.ist_es_ein_bruch()
 
-        #Überprüfung, ob es sich um einen Bruch handelt
         if nenner is None:
-            return {}  # Gibt ein leeres Dictionary zurück
+            return {}  
 
         polstellen = sp.solve(nenner, self.variable)
         return {'Polstellen' : polstellen}
 
-#------------ VERHALTEN IM UNENDLICHEN ------------
+#------------ LIMITS AT INFINITY ------------
     def verhalten_im_unendlichen(self):
         limit_negativ = sp.limit(self.funktion,self.variable,-sp.oo)
         limit_positiv = sp.limit(self.funktion, self.variable,sp.oo)
 
-        #Speichern der Grenzwerte im dictionary
+        
         Grenzwerte = {}
 
         if limit_negativ != limit_positiv:
@@ -217,18 +217,18 @@ class Kurvendiskussion:
 
         return Grenzwerte
 
-#------------ PLOT ------------
+#------------ PLOTTING ------------
     def plot_der_funktion(self):
-        # Funktion lambdifizieren
+        # Create numerical version of function
         f_lambdify = sp.lambdify(self.variable, self.funktion, 'numpy')
 
-        # Nullstellen, Extremstellen und Wendepunkte berechnen
+        # Compute relevant points
         nullstellen_dict = self.nullstellen()
         extremstellen_dict = self.hinreichende_bedingung_extremstellen()
         wendepunkte_dict = self.hinreichende_bedingung_wendepunkte()
 
 
-        # Werte aus Dictionaries extrahieren und in eine Liste konvertieren
+       
         if nullstellen_dict:
             nullstellen = nullstellen_dict.get("Nullstellen", [])
         else:
@@ -245,11 +245,11 @@ class Kurvendiskussion:
 
 
 
-        # Wichtige Punkte extrahieren und in eine Liste packen
+        
         wichtige_punkte = nullstellen + extremstellen + wendepunkte
         wichtige_punkte = [float(p) for p in wichtige_punkte if p.is_real]
 
-        # Dynamischen Plotbereich berechnen
+        # Determine plot range
         if wichtige_punkte:
             x_min = min(wichtige_punkte) - 1  # Puffer von 1 Einheiten
             x_max = max(wichtige_punkte) + 1
@@ -258,15 +258,15 @@ class Kurvendiskussion:
 
 
 
-        # X-Wertebereich basierend auf Grenzen anpassen
+        
         x_vals = np.linspace(x_min, x_max, 1000)
         y_vals = f_lambdify(x_vals)
 
-        # Berechnung der y-Achsenlimits
+        
         y_min = min(y_vals)
         y_max = max(y_vals)
 
-        # Punkte plotten
+        # Plot special points
         if nullstellen:
             plt.scatter(nullstellen, [f_lambdify(float(ns)) for ns in nullstellen], color='red', label='Nullstellen',
                         zorder=5)
@@ -278,12 +278,12 @@ class Kurvendiskussion:
                         zorder=5)
 
 
-        # Achsenlimits setzen
+        
         plt.xlim(x_min, x_max)
         plt.ylim(y_min - 2, y_max + 2)  # Puffer für die y-Achse
 
 
-        # Plot erstellen
+        # Finalize plot
         plt.plot(x_vals, y_vals, label=str(self.funktion))
         plt.title("Plot der Funktion")
         plt.xlabel("x")
@@ -293,29 +293,3 @@ class Kurvendiskussion:
         plt.legend()
         plt.grid(True)
         plt.show()
-
-
-
-
-x = sp.symbols('x')
-
-funktion = x**3 - 3*x**2 + 2  # Definiere die Funktion
-#funktion2 = (x+1)*(x+3)
-#funktion3 = x**2
-#funktion4 = (x**2 + 3*x + 2) / (1-x**2)
-
-
-# Erstelle eine Instanz der Klasse
-kurve = Kurvendiskussion(funktion, x)
-#print(kurve.berechne_extremstellen())
-kurve.plot_der_funktion()
-#print(kurve.berechne_y_achsenabschnitt())
-#kurve.ausgabe_extremstellen()
-#print(kurve.hinreichende_bedingung_extremstellen())
-#print(kurve.hinreichende_bedingung_wendepunkte())
-#print("polstellen")
-#print(kurve.finde_polstellen())
-#print(kurve.verhalten_im_unendlichen())
-#print(kurve.symmetrie_eigenschaft())
-#print()
-
