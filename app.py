@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def htmlprobe():
-    # Beispieleingabe für die HTML-Ansicht
+    # Example function
     example_function = "x^3 - 3*x + 2"
     return render_template('htmlprobe.html', example_function=example_function)
 
