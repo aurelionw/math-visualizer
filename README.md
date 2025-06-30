@@ -15,6 +15,23 @@ This repository contains a web application for interactive function analysis, in
 - Step-by-step explanations in LaTeX (e.g., PQ formula, polynomial division)
 - Interactive web interface using Flask, JavaScript, and MathJax
 
+## Demo
+
+Below are a few screenshots to demonstrate the interface and functionality:
+
+### Start Page
+![Start Page](demo_screenshots/01_Starting_page.png)
+
+### Checkboxes Selected
+![Checkboxes Selected](demo_screenshots/02_Checkboxes_selected.png)
+
+### After Clicking "Berechnen"
+![Calculation Triggered](demo_screenshots/03_Clicked_berechnen.png)
+
+### Results Display
+![Results](demo_screenshots/04_display_of_solution.png)
+
+
 ## Tech Stack
 
 - **Backend:** Python, Flask, SymPy, NumPy
