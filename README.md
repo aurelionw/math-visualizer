@@ -43,19 +43,6 @@ Below are a few screenshots to demonstrate the interface and functionality:
 </details>
 
 
-### Start Page
-![Start Page](demo_screenshot/01_Starting_page.PNG)
-
-### Checkboxes Selected
-![Checkboxes Selected](demo_screenshot/02_Checkboxes_selected.PNG)
-
-### After Clicking "Berechnen"
-![Calculation Triggered](demo_screenshot/03_Clicked_berechnen.PNG)
-
-### Results Display
-![Results](demo_screenshot/04_display_of_solution.PNG)
-
-
 ## Tech Stack
 
 - **Backend:** Python, Flask, SymPy, NumPy
