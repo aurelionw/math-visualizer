@@ -20,16 +20,16 @@ This repository contains a web application for interactive function analysis, in
 Below are a few screenshots to demonstrate the interface and functionality:
 
 ### Start Page
-![Start Page](demo_screenshot/01_Starting_page.png)
+![Start Page](demo_screenshot/01_Starting_page.PNG)
 
 ### Checkboxes Selected
-![Checkboxes Selected](demo_screenshot/02_Checkboxes_selected.png)
+![Checkboxes Selected](demo_screenshot/02_Checkboxes_selected.PNG)
 
 ### After Clicking "Berechnen"
-![Calculation Triggered](demo_screenshot/03_Clicked_berechnen.png)
+![Calculation Triggered](demo_screenshot/03_Clicked_berechnen.PNG)
 
 ### Results Display
-![Results](demo_screenshot/04_display_of_solution.png)
+![Results](demo_screenshot/04_display_of_solution.PNG)
 
 
 ## Tech Stack
