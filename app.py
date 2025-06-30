@@ -15,11 +15,11 @@ def htmlprobe():
     example_function = "x^3 - 3*x + 2"
     return render_template('htmlprobe.html', example_function=example_function)
 
-# Hilfsfunktion zur Konvertierung von SymPy-Objekten in JSON-kompatible Typen
+# Helper function to convert SymPy objects into JSON-compatible types
 def convert_to_json_compatible(data):
     if isinstance(data, sp.Basic):
-        # Konvertiere zu LaTeX für Wurzel-Darstellung
-        return sp.latex(data)  # Gibt LaTeX-kompatiblen String zurück
+        # Convert SymPy expression to LaTeX format (for better rendering of e.g. square roots)
+        return sp.latex(data)  # Returns a LaTeX-compatible string
     elif isinstance(data, dict):
         return {key: convert_to_json_compatible(value) for key, value in data.items()}
     elif isinstance(data, list):
@@ -28,6 +28,7 @@ def convert_to_json_compatible(data):
 
 @app.route('/api/simplify', methods=['POST'])
 def simplify_expression():
+    # Convert string expression to SymPy object and simplify it
     data = request.get_json()
     funktion_str = data.get('funktion')
     try:
@@ -36,6 +37,7 @@ def simplify_expression():
         latex_output = sp.latex(simplified_expr)
         return jsonify({"latex": latex_output})
     except (sp.SympifyError, ValueError):
+        # In case of error, return original expression
         return jsonify({"latex": funktion_str})
 
 @app.route('/api/kurvendiskussion', methods=['POST'])
@@ -46,12 +48,12 @@ def kurvendiskussion():
     selected_options = data.get('selected')
 
     try:
-        # Bereite die Funktion vor: Ersetze ^ mit ** und korrigiere Multiplikationssyntax
+        # Preprocess input: replace ^ with ** and fix implicit multiplication
         funktion_str = funktion_str.replace('^', '**')
         funktion_str = re.sub(r'(\d+)([a-zA-Z])', r'\1*\2', funktion_str)
         funktion_str = funktion_str.replace("−", "-")
 
-        # Dynamische Variablenerkennung
+        # Detect variables from input string dynamically
         detected_variables = re.findall(r'[a-zA-Z]+', funktion_str)
         if selected_variable not in detected_variables:
             selected_variable = detected_variables[0] if detected_variables else 'x'
@@ -59,16 +61,15 @@ def kurvendiskussion():
         variable = sp.symbols(selected_variable)
         funktion = sp.sympify(funktion_str)
 
-        # Instanz von Kurvendiskussion erstellen
+        # Initialize Kurvendiskussion instance
         kd = Kurvendiskussion(funktion, variable)
         latex_function = sp.latex(funktion)
 
         response = {'latex': latex_function, 'variable': selected_variable}
 
-        # Optional ausgewählte Berechnungen
-        ableitungen = set()
+        ableitungen = set() # Track which derivatives to return
 
-        # Nullstellen
+        # Zero-crossings
         if "Nullstellen" in selected_options:
             response['Nullstellen'] = convert_to_json_compatible(kd.nullstellen().get('Nullstellen', []))
             # Rechenweg für Nullstellen hinzufügen
@@ -76,39 +77,39 @@ def kurvendiskussion():
             rechenweg = rechenweg_instance.welche_rechnung_benutzen()
             response['Nullstellen_rechenweg'] = rechenweg.get("schritte", [])
 
-        # y-Achsenabschnitt
+        # y-axis intersection
         if "y-Achsenabschnitt" in selected_options:
             response['y-Achsenabschnitt'] = convert_to_json_compatible(
                 kd.berechne_y_achsenabschnitt().get('y-Achsenabschnitt', "Nicht definiert")
             )
 
-        # Extremstellen
+        # Extrema (minima/maxima)
         if "Extremstellen" in selected_options:
             response['Extremstellen'] = convert_to_json_compatible(
                 kd.berechne_extremstellen().get('extremstellen', [])
             )
-            ableitungen.add('erste')
-            # Rechenweg für Extremstellen hinzufügen
+            ableitungen.add('erste')  # Mark first derivative as required
+            # Add explanation for extrema
             rechenweg_instance = Rechenweg(funktion, variable)
             rechenweg = rechenweg_instance.welche_rechnung_benutzen()
             response['Extremstellen_rechenweg'] = rechenweg.get("schritte", [])
 
-        # Wendepunkte
+        # Inflection points
         if "Wendepunkte" in selected_options:
             response['Wendepunkte'] = convert_to_json_compatible(
                 kd.berechne_wendepunkte().get('wendepunkte', [])
             )
-            ableitungen.add('zweite')
-            # Rechenweg für Wendepunkte hinzufügen
+            ableitungen.add('zweite')  # Mark second derivative as required
+            # Add explanation for inflection points
             rechenweg_instance = Rechenweg(funktion, variable)
             rechenweg = rechenweg_instance.welche_rechnung_benutzen()
             response['Wendepunkte_rechenweg'] = rechenweg.get("schritte", [])
 
-        # Verhalten im Unendlichen
+        # End behavior (limit analysis as x → ±∞)
         if "Verhalten im unendlichen" in selected_options:
             response['Verhalten im Unendlichen'] = convert_to_json_compatible(kd.verhalten_im_unendlichen())
 
-        # Füge die Ableitungen hinzu, falls benötigt
+        # Add selected derivatives to the response
         if ableitungen:
             response['Ableitungen'] = kd.ableitungen_anzeigen(ableitungen)
 
@@ -121,7 +122,7 @@ def kurvendiskussion():
 
 def format_polynomdivision_as_latex(dividend, divisor, steps):
     """
-    Formatiert den Polynomdivision-Rechenweg als LaTeX.
+    Formats polynomial division steps as LaTeX for visual representation.
     """
     latex = []
     latex.append(f"\\text{{{sp.latex(dividend)}}} : \\left({sp.latex(divisor)}\\right)")
@@ -144,16 +145,15 @@ def format_polynomdivision_as_latex(dividend, divisor, steps):
 def rechenweg():
     data = request.get_json()
     funktion_str = data.get('funktion')
-    selected_variable = data.get('variable', 'x')  # Standardvariable 'x'
+    selected_variable = data.get('variable', 'x')   # Default to 'x' if no variable is specified
 
     try:
+        # Preprocess input: replace power symbol and fix multiplication formatting
+        funktion_str = funktion_str.replace("^", "**")  # Ensure correct exponent notation
+        funktion_str = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', funktion_str)  # Insert multiplication symbol
+        funktion_str = funktion_str.replace("−", "-").replace(" ", "")  # Handle unicode minus and remove spaces
 
-        # Eingabestring bereinigen
-        funktion_str = funktion_str.replace("^", "**")  # Exponenten fixieren
-        funktion_str = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', funktion_str)  # Multiplikation fixieren
-        funktion_str = funktion_str.replace("−", "-").replace(" ", "")  # Unicode-Minus und Leerzeichen
-
-        # Dynamische Variablenerkennung
+        # Detect variables dynamically
         detected_variables = list(set(re.findall(r'[a-zA-Z]+', funktion_str)))
         if selected_variable not in detected_variables:
             selected_variable = detected_variables[0] if detected_variables else 'x'
@@ -161,25 +161,25 @@ def rechenweg():
         variable = sp.symbols(selected_variable)
         funktion = sp.sympify(funktion_str)
 
-        # Initialisiere Rechenweg-Instanz
+        # Initialize step-by-step explanation class
         rechenweg_instance = Rechenweg(funktion, variable)
         rechenweg_schritte = []  # Gesamte Schritte
 
         print(f"Bereinigte Funktion: {funktion}")
 
-        # Polynomdivision iterativ durchführen
+        # Perform polynomial division iteratively for degree ≥ 3
         while sp.Poly(funktion).degree() >= 3:
             polynomdivision_result = rechenweg_instance.welche_rechnung_benutzen()
             rechenweg_schritte.extend(polynomdivision_result.get("schritte", []))
 
 
 
-        # Löse verbleibendes Polynom (Grad ≤ 2)
+       # Solve remaining polynomial (degree ≤ 2)
         if sp.Poly(funktion).degree() == 2:
             pq_result = rechenweg_instance.pq_formel()
             rechenweg_schritte.extend(pq_result.get("schritte", []))
         elif sp.Poly(funktion).degree() == 1:
-            # Lineares Auflösen
+           # Solve linear equation
             loesung = sp.solve(funktion, variable)
             rechenweg_schritte.append({
                 "text": "Lineares Auflösen der Gleichung:",
@@ -187,7 +187,7 @@ def rechenweg():
             })
 
 
-        # Formatierte Schritte in LaTeX
+        # Format all steps into LaTeX output
         latex_steps = []
         for step in rechenweg_schritte:
             latex_steps.append(f"{step.get('text', '')}: {step.get('latex', '')}")
