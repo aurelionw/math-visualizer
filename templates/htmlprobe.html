@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Kurvendiskussionsrechner</title>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/htmlprobe_style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [["\\(", "\\)"], ["\\[", "\\]"]] },
+        options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"] }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+    <div id="content-container">
+        <h1>Kurvendiskussionsrechner</h1>
+
+        <form id="form">
+            <label for="funktion"></label>
+            <div class="input-container">
+                <!-- Beispiel-Eingabe hinzugefügt -->
+                <input type="text" id="funktion" name="funktion" placeholder="Geben Sie die Funktion ein" value="x^3 - 3*x + 2">
+                <label for="variable">Variable:</label>
+                <select id="int-var" size="1">
+                    <optgroup label="Aktuelle Variable">
+                        <option value="x">x</option>
+                    </optgroup>
+                    <optgroup label="Verwendete Variablen">
+                        <option value="x">x</option>
+                    </optgroup>
+                    <optgroup label="Standardvariablen">
+                        <option value="a">a</option>
+                        <option value="b">b</option>
+                        <option value="c">c</option>
+                        <option value="d">d</option>
+                        <option value="e">e</option>
+                        <option value="f">f</option>
+                        <option value="g">g</option>
+                        <option value="h">h</option>
+                        <option value="i">i</option>
+                        <option value="j">j</option>
+                        <option value="k">k</option>
+                        <option value="l">l</option>
+                        <option value="m">m</option>
+                        <option value="n">n</option>
+                        <option value="o">o</option>
+                        <option value="p">p</option>
+                        <option value="q">q</option>
+                        <option value="r">r</option>
+                        <option value="s">s</option>
+                        <option value="t">t</option>
+                        <option value="u">u</option>
+                        <option value="v">v</option>
+                        <option value="w">w</option>
+                        <option value="x">x</option>
+                        <option value="y">y</option>
+                        <option value="z">z</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- TEX-Ausgabe-Box -->
+            <div id="latex-output" class="output-box">
+                <div class="latex-content"></div>
+                <div class="latex-label"></div>
+            </div>
+
+            <div class="checkbox-group">
+                <!-- Reihenfolge geändert -->
+                <div class="checkbox-button" data-value="y-Achsenabschnitt">y-Achsenabschnitt</div>
+                <div class="checkbox-button" data-value="Nullstellen">Nullstellen</div>
+                <div class="checkbox-button" data-value="Extremstellen">Extremstellen</div>
+                <div class="checkbox-button" data-value="Wendepunkte">Wendepunkte</div>
+                <div class="checkbox-button" data-value="Verhalten im unendlichen">Verhalten im unendlichen</div>
+                <div class="checkbox-button" data-value="Funktion vereinfachen">Funktion vereinfachen</div>
+            </div>
+
+            <button type="submit">Berechnen</button>
+        </form>
+
+        <!-- Ergebnis-Container für die Ausgabe -->
+        <div id="results-section" class="results-container" style="display: none;">
+            <div class="result-container">
+              <h2>Ergebnisse</h2>  <!-- Ergebnisboxen werden hier dynamisch hinzugefügt -->
+
+              <!-- Akkordeon-Stil Ergebnisse -->
+              <details>
+                  <summary>y-Achsenabschnitt</summary> <!-- Reihenfolge geändert -->
+                  <ul id="y-achsenabschnitt"></ul>
+              </details>
+              <details>
+                  <summary>Nullstellen</summary> <!-- Reihenfolge geändert -->
+                  <ul id="nullstellen"></ul>
+              </details>
+              <details>
+                  <summary>Extremstellen</summary>
+                  <ul id="extremstellen"></ul>
+              </details>
+              <details>
+                  <summary>Wendepunkte</summary>
+                  <ul id="wendepunkte"></ul>
+              </details>
+              <details>
+                  <summary>Verhalten im unendlichen</summary>
+                    <ul id="verhalten"></ul>
+                </details>
+                <!-- Rechenweg-Ergebnis -->
+                <details id="rechenweg-section" style="display: none;">
+                    <summary>Rechenweg</summary>
+                    <div id="rechenweg-container" class="rechenweg-container"></div>
+                </details>
+            </div>
+        </div>
+
+        <!-- Ladeanzeige -->
+        <div id="loading" style="display: none;">
+            <img src="{{ url_for('static', filename='images/spinner.gif') }}" alt="Laden...">
+        </div>
+    </div>
+
+    <div id="hint">
+        Keine Haftung für die Korrektheit der Ergebnisse. Hardware- und Softwarefehler können Ungenauigkeiten verursachen. Ergebnisse stets überprüfen.
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

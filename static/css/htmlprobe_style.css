@@ -1,0 +1,376 @@
+/* Grundlayout */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #ffffff;
+    color: #333;
+}
+
+/* Container für den gesamten Inhalt, sodass der Hinweis unten fixiert bleibt */
+#content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    width: 100%;
+    padding-bottom: 50px; /* Platz für den Hinweis am unteren Rand */
+}
+
+/* Überschrift */
+h1 {
+    color: #333;
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* Spinner */
+#loading img {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Ergebnisbereich */
+.results-container {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9fbfd;
+    border: 1px solid #e0e4e8;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Ergebnisüberschrift */
+.results-container h2 {
+    text-align: center;
+    color: black; /* Schwarze Farbe */
+    margin: 20px 0; /* Abstand oben und unten */
+    font-family: 'Roboto', sans-serif; /* Sans-Serif Schriftart */
+}
+
+/* Ergebniscontainer */
+.result-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Abstand zwischen den Boxen */
+}
+
+/* Einzelne Ergebnisboxen */
+.result-box {
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+    position: relative; /* Für die Positionierung von Icons */
+    margin-bottom: 20px; /* Abstand zwischen den Boxen */
+    width: 100%; /* Volle Breite ausfüllen */
+    display: flex; /* Flexbox für den Inhalt */
+    flex-direction: column; /* Vertikales Layout */
+}
+
+/* Überschrift für die Ergebnisbox */
+.result-box h3 {
+    margin: 0;
+    font-size: 1.5em; /* Größe der Überschrift */
+    color: black; /* Schwarze Farbe */
+    font-family: 'Roboto', sans-serif; /* Sans-Serif Schriftart */
+    border-bottom: 2px solid #e0e4e8; /* Abtrennung */
+    padding-bottom: 15px; /* Abstand zwischen Überschrift und Inhalt */
+}
+
+/* Inhalt der Ergebnisbox */
+.result-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px; /* Abstand nach der Überschrift */
+}
+
+/* Buttons für Hilfe, Export und Berechnung */
+.help-button, .export-button, .calculate-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.help-button:hover, .export-button:hover, .calculate-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Spezieller Button für die Berechnung */
+button[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    background-color: #0f6b4c; /* Modernes Grün */
+    color: white;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0a4c38;
+    transform: scale(1.05);
+}
+
+/* Formular-Container */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 800px;
+}
+
+/* Eingabefeld und Select Container */
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Eingabefeld */
+input[type="text"] {
+    flex: 1;
+    max-width: 600px;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 25px;
+    background-color: #f0f2f5;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Anpassung für Select */
+select {
+    width: auto;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #f0f2f5;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    appearance: none;
+    text-align: center;
+}
+
+/* Checkboxen-Stil */
+.checkbox-group {
+    display: flex;
+    gap: 20px;
+}
+
+/* Checkbox-Style als Button */
+.checkbox-button {
+    display: inline-block;
+    padding: 10px 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f7f8fa;
+    color: #555;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.checkbox-button:hover {
+    background-color: #e6e8ec;
+}
+
+.checkbox-button.selected {
+    background-color: #d1e7dd;
+    border-color: #0f6b4c;
+    color: #1a1a1a;
+    box-shadow: 0 0 5px rgba(15, 107, 76, 0.5);
+}
+
+/* Hinweis-Style */
+#hint {
+    font-size: 0.9em;
+    color: #555;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #ffffff;
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+/* Akkordeon */
+details {
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    background-color: #fff;
+}
+
+summary {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    input[type="text"], select {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .results-container {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+
+    .latex-content {
+        font-size: 1.2em; /* Kleinere Schriftgröße */
+        padding: 8px; /* Weniger Innenabstand */
+    }
+
+}
+
+@media (min-width: 1200px) {
+    .results-container {
+        max-width: 1000px;
+    }
+}
+
+/* LaTeX-Ausgabe-Box */
+/*.output-box {
+    width: 100%;
+    max-width: 600px;
+    padding: 15px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #f7f8fa;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 25px;
+}
+
+/* Inhalt der LaTeX-Ausgabe */
+.latex-content {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px;
+    font-size: 1.5em;
+    color: #333;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.latex-content:hover {
+    background-color: #f0f8ff; /* Hellblau für Fokus */
+    box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.2); /* Leichter blau-töniger Schatten */
+}
+
+/* Zentrierte Ergebnisse */
+.results-container ul {
+    list-style-type: none; /* Entfernt die Punkte */
+    padding: 0; /* Entfernt zusätzlichen Innenabstand */
+    margin: 0; /* Entfernt äußeren Abstand */
+    text-align: center; /* Zentriert die Ergebnisse */
+}
+
+/* Zentrierte Listenelemente */
+.results-container ul li {
+    display: inline-block; /* Macht jedes Ergebnis blockähnlich */
+    margin-bottom: 10px; /* Abstand zwischen den Ergebnissen */
+    font-size: 1.2em; /* Optional: größere Schrift für bessere Lesbarkeit */
+}
+
+
+/* Dynamische Knöpfe: Rechenweg und Vereinfachen */
+.dynamic-button {
+    display: inline-block;
+    padding: 10px 15px;
+    border: 2px solid #ccc; /* Standardfarbe */
+    border-radius: 10px;
+    background-color: #f7f8fa; /* Standardhintergrund */
+    color: #555;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover- und Fokus-Effekt für die Knöpfe */
+.dynamic-button:hover {
+    background-color: #e6e8ec; /* Leicht dunklerer Hintergrund */
+}
+
+/* Wenn der Knopf aktiv ist (z.B. angeklickt oder ausgewählt) */
+.dynamic-button.selected {
+    background-color: #d1e7dd; /* Grüner Hintergrund */
+    border-color: #0f6b4c; /* Grüner Rahmen */
+    color: #1a1a1a;
+    box-shadow: 0 0 5px rgba(15, 107, 76, 0.5); /* Leichter grüner Glüheffekt */
+}
+
+/* Optional: Hover über einem aktiven Knopf */
+.dynamic-button.selected:hover {
+    background-color: #c2dfd3; /* Etwas dunkleres Grün */
+}
+
+
+
+
+/* Rechenweg-Stil */
+.rechenweg-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f7f9fc;
+    border: 1px solid #cdd7e3;
+    border-radius: 10px;
+}
+
+.rechenweg-container h3 {
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.3em;
+
+}
+
+.latex-rechenweg {
+    font-size: 1.2em;
+    line-height: 1.5;
+    white-space: pre-wrap; /* Erlaubt Zeilenumbrüche */
+    text-align: left;
+}
