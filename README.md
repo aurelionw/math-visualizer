@@ -19,7 +19,22 @@ This tool allows users to analyze mathematical functions in an educational, visu
 
 ## Demo
 
+
+![Demo of the Math Visualizer](demo/demo_gif.gif)
+
 Below are a few screenshots to demonstrate the interface and functionality:
+
+## 📸 Screenshots
+
+<details>
+  <summary>Click to expand screenshots</summary>
+
+  ![Start page](demo_screenshot/01_Starting_page.PNG)
+  ![Checkboxes selected](demo_screenshot/02_Checkboxes_selected.PNG)
+  ![Calculation triggered](demo_screenshot/03_Clicked_berechnen.PNG)
+  ![Result shown](demo_screenshot/04_display_of_solution.PNG)
+
+</details>
 
 ### Start Page
 ![Start Page](demo_screenshot/01_Starting_page.PNG)
