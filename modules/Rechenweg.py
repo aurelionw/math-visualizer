@@ -3,7 +3,7 @@ import random
 import subprocess
 import os
 
-"""Klasse zur Darstellung der Rechenwege"""
+"""Class to provide step-by-step explanations for solving equations."""
 class Rechenweg:
 
     def __init__(self, funktion, variable):
@@ -12,19 +12,19 @@ class Rechenweg:
         self.ordnung = self.ordnung_der_funktion()
 
     def ordnung_der_funktion(self):
-        """Bestimmt den Polynomen-Grad"""
+        """Determines the degree of the polynomial."""
         try:
             ordnung = sp.Poly(self.funktion).degree()
         except sp.PolynomialError:
-            ordnung = None  # Falls die Funktion kein Polynom ist
+            ordnung = None  # If the expression is not a polynomia
         return ordnung
 
     def pq_formel(self):
-        """Führt die pq-Formel durch und gibt die Zwischenschritte in LaTeX zurück."""
+        """Applies the p-q formula and returns all calculation steps in LaTeX format."""
         funktion_als_liste = sp.Poly(self.funktion).all_coeffs()
-        schritte = []  # Liste zur Speicherung der Schritte für die Webseite
+        schritte = []  
 
-        # Abfrage, ob das erste Element in der Liste Vorfaktor 1 besitzt
+        # Normalize if leading coefficient is not 1
         if funktion_als_liste[0] != 1:
             schritte.append({
                 "text": f"Normiere die Funktion, da der Vorfaktor {funktion_als_liste[0]} ungleich 1 ist.",
@@ -46,7 +46,7 @@ class Rechenweg:
             "latex": f"\\left( \\frac{{p}}{{2}} \\right)^2 - q = \\left( \\frac{{{p}}}{{2}} \\right)^2 - {q} = {sp.latex(diskriminante)}"
         })
 
-        # Überprüfung ob Ausdruck im Bruch < 0 ist
+        # Handle complex roots
         if diskriminante < 0:
             schritte.append({
                 "text": "Die Diskriminante ist negativ. Es existieren keine reellen Lösungen.",
@@ -72,17 +72,14 @@ class Rechenweg:
         }
 
     def polynomdivision_latex(self, divisor=None):
-        """
-        Führt eine Polynomdivision durch und gibt den LaTeX-Code zurück,
-        der mit dem Paket 'polynom' gerendert werden kann.
-        """
+        """Performs polynomial division and returns LaTeX code (for polynom package)."""
         if divisor is None:
             solutions = sp.solve(self.funktion, self.variable)
             reelle_loesungen = [sol for sol in solutions if sol.is_real]
             if not reelle_loesungen:
                 return {"latex": None, "error": "Keine reelle Nullstelle gefunden für die Division."}
             random_solution = random.choice(reelle_loesungen)
-            divisor = self.variable - random_solution  # Divisor aus Nullstelle
+            divisor = self.variable - random_solution
 
         # LaTeX-Code für Polynomdivision erstellen
         dividend_latex = sp.latex(self.funktion)
@@ -93,19 +90,16 @@ class Rechenweg:
 
 
     def polynomdivision(self, divisor=None):
-        """
-        Führt eine Polynomdivision durch und gibt die Zwischenschritte zurück.
-        """
-        schritte = []  # Liste zur Speicherung der Schritte
+        """Performs step-by-step polynomial division and returns all steps."""
+        schritte = []  
 
-        # Falls kein Divisor gegeben ist, versuche, eine reelle Nullstelle zu finden
         if divisor is None:
             solutions = sp.solve(self.funktion, self.variable)
             reelle_loesungen = [sol for sol in solutions if sol.is_real]
             if not reelle_loesungen:
                 return {"schritte": [], "fehler": "Keine reelle Nullstelle gefunden für die Division."}
             random_solution = random.choice(reelle_loesungen)
-            divisor = self.variable - random_solution  # Divisor aus Nullstelle
+            divisor = self.variable - random_solution  
 
         if divisor == 0:
             return {"schritte": [], "fehler": "Fehler: Der Divisor darf nicht 0 sein."}
@@ -131,7 +125,7 @@ class Rechenweg:
                 break
 
             if dividend_poly.degree() < divisor_poly.degree():
-                break  # Abbruchbedingung: Grad des Dividenden ist kleiner als der des Divisors
+                break 
 
             lead_dividend = dividend_poly.coeffs()[0]  # Führender Koeffizient
             lead_divisor = divisor_poly.coeffs()[0]  # Führender Koeffizient des Divisors
@@ -144,19 +138,17 @@ class Rechenweg:
                 "latex": f"\\text{{Monomial-Quotient: }} {sp.latex(monomial_quotient)}"
             })
 
-            # Subtrahiere das Produkt aus Quotient und Divisor vom Dividend
+
             new_dividend = dividend - monomial_quotient * divisor
             schritte.append({
                 "text": f"Subtrahiere {sp.latex(monomial_quotient * divisor)} von {sp.latex(dividend)}",
                 "latex": f"{sp.latex(dividend)} - ({sp.latex(monomial_quotient)} \\cdot {sp.latex(divisor)}) = {sp.latex(new_dividend)}"
             })
 
-            # Aktualisiere den Dividend
+
             dividend = sp.simplify(new_dividend)
-            # Addiere den Monom-Quotient zum Gesamten
             quotient += monomial_quotient
 
-            # Abbruchbedingung bei konstantem Dividend
             if dividend.is_constant():
                 schritte.append({
                     "text": "Dividend ist konstant. Division abgeschlossen.",
@@ -164,7 +156,6 @@ class Rechenweg:
                 })
                 break
 
-        # Endergebnisse
         schritte.append({
             "text": "Endergebnis der Polynomdivision",
             "latex": f"\\text{{Quotient: }} {sp.latex(sp.simplify(quotient))}, \\text{{ Rest: }} {sp.latex(dividend)}"
@@ -177,10 +168,7 @@ class Rechenweg:
         }
 
     def welche_rechnung_benutzen(self):
-        """
-        Bestimmt die geeignete Methode basierend auf der Ordnung der Funktion und fügt die Ergebnisse
-        in den Rechenweg ein.
-        """
+        """Selects the appropriate solving method based on polynomial degree."""
         if self.ordnung == 1:
             loesung = sp.solve(self.funktion, self.variable)
             return {
@@ -220,7 +208,7 @@ class Rechenweg:
             }
 
     def vereinfachen(self):
-        """Vereinfacht die Funktion."""
+        """Simplifies the given function."""
         try:
             vereinfachte_funktion = sp.simplify(self.funktion)
             return {'Original': self.funktion, 'Vereinfacht': vereinfachte_funktion}
@@ -228,9 +216,7 @@ class Rechenweg:
             return f"Fehler bei der Vereinfachung: {e}"
 
     def format_polynomdivision_as_latex(dividend, divisor, steps):
-        """
-        Formatiert den Polynomdivision-Rechenweg korrekt als LaTeX.
-        """
+        """Formats all polynomial division steps as LaTeX table."""
         latex = []
         latex.append(f"\\text{{Dividend: }} {sp.latex(dividend)}, \\text{{ Divisor: }} {sp.latex(divisor)}")
         latex.append("\\begin{array}{r|l}")
@@ -246,9 +232,7 @@ class Rechenweg:
         return "\n".join(latex)
 
     def generate_polynom_latex(self, dividend, divisor):
-        """
-        Generiert den LaTeX-Code für die Polynomdivision.
-        """
+        """Generates complete LaTeX code to render the polynomial division using the polynom package."""
         return f"""
         \\documentclass{{article}}
         \\usepackage{{polynom}}
@@ -258,32 +242,15 @@ class Rechenweg:
         """
 
     def compile_latex(self, latex_code, output_dir):
-        """
-        Kompiliert den LaTeX-Code zu einer PDF-Datei.
-        """
+        """Compiles LaTeX code into a PDF file."""
         tex_file_path = os.path.join(output_dir, "polynom.tex")
         pdf_file_path = os.path.join(output_dir, "polynom.pdf")
 
-        # Schreibe den LaTeX-Code in eine Datei
         with open(tex_file_path, "w") as tex_file:
             tex_file.write(latex_code)
 
-        # Kompiliere die LaTeX-Datei mit pdflatex
         subprocess.run(
             ["pdflatex", "-output-directory", output_dir, tex_file_path],
             check=True
         )
         return pdf_file_path
-
-
-
-
-
-
-
-
-
-
-
-
-
