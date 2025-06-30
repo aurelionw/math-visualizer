@@ -40,10 +40,8 @@ Below are a few screenshots to demonstrate the interface and functionality:
 
   ### Results Display
   ![Results](demo_screenshot/04_display_of_solution.PNG)
-  
-
-
 </details>
+
 
 ### Start Page
 ![Start Page](demo_screenshot/01_Starting_page.PNG)
