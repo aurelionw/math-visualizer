@@ -3,44 +3,44 @@ document.addEventListener("DOMContentLoaded", () => {
     const resultsSection = document.getElementById('results-section');
     const latexContentDiv = document.querySelector(".latex-content");
     const inputField = document.getElementById('funktion');
-    const variableSelect = document.getElementById('int-var'); // Auswahlbox für Variablen
+    const variableSelect = document.getElementById('int-var'); 
     const loadingIndicator = document.getElementById('loading');
 
 
-    // Setze Beispieleingabe beim Laden
-    const exampleFunction = "x^3 - 3x + 2"; // Beispieleingabe
+    // Set example function on load
+    const exampleFunction = "x^3 - 3x + 2"; 
     inputField.value = exampleFunction;
 
     let timeout = null;
 
-    // Funktion zur MathJax-Darstellung aufrufen
+    // Render MathJax content
     function renderMath(content) {
         MathJax.startup.promise = MathJax.startup.promise
             .then(() => MathJax.typesetPromise([content]))
             .catch(err => console.error('MathJax Fehler:', err));
     }
 
-    // LaTeX-Darstellung der Beispieleingabe direkt beim Laden
+    // Render LaTeX of the example function on page load
     function renderExampleFunction() {
-        latexContentDiv.innerHTML = `\\( f(x) = ${exampleFunction} \\)`; // Unveränderte Darstellung
+        latexContentDiv.innerHTML = `\\( f(x) = ${exampleFunction} \\)`; 
         renderMath(latexContentDiv);
     }
 
     renderExampleFunction(); // Beispieleingabe initial rendern
 
-    // Funktion zur Variablenerkennung
+    // Detect variables used in the expression
     function detectVariables(expression) {
         try {
-            const variables = Array.from(new Set(expression.match(/[a-zA-Z]+/g))); // Extrahiert Variablen
+            const variables = Array.from(new Set(expression.match(/[a-zA-Z]+/g))); 
             return variables || [];
         } catch (e) {
             return [];
         }
     }
 
-    // Funktion zum Aktualisieren der Variablenauswahl
+    // Update dropdown with detected variables
     function updateVariableSelect(variables) {
-        variableSelect.innerHTML = ''; // Leert die Auswahlbox
+        variableSelect.innerHTML = ''; 
 
         if (variables.length === 0) {
             const defaultOption = document.createElement('option');
@@ -62,16 +62,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Echtzeit-Aktualisierung der LaTeX-Darstellung und Variablen
+    // Update LaTeX display and variable list in real time
     inputField.addEventListener('input', () => {
         clearTimeout(timeout);
         const funktion = inputField.value;
         if (funktion.trim()) {
             timeout = setTimeout(() => {
-                latexContentDiv.innerHTML = `\\( f(x) = ${funktion} \\)`; // Zeigt Eingabe ohne Vereinfachung
+                latexContentDiv.innerHTML = `\\( f(x) = ${funktion} \\)`; 
                 renderMath(latexContentDiv);
 
-                // Variablen aktualisieren
+                
                 const variables = detectVariables(funktion);
                 updateVariableSelect(variables);
             }, 300);
@@ -81,25 +81,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Checkbox-Handling
+    // Toggle checkboxes
     checkboxButtons.forEach(button => {
         button.addEventListener('click', () => button.classList.toggle('selected'));
     });
 
-    // Formular-Handler für die Berechnungen
+    // Handle form submission
     document.getElementById('form').addEventListener('submit', (event) => {
         event.preventDefault();
         const funktion = inputField.value;
-        const selectedVariable = variableSelect.value; // Ausgewählte Variable
+        const selectedVariable = variableSelect.value; // Selected Variable
         const selectedCheckboxes = Array.from(checkboxButtons)
             .filter(button => button.classList.contains('selected'))
             .map(button => button.getAttribute('data-value'));
 
-        // Ladeanzeige anzeigen
+        // Show loading spinner
         loadingIndicator.style.display = 'block';
-        resultsSection.style.display = 'none'; // Ergebnisbereich verstecken
+        resultsSection.style.display = 'none'; 
 
-        // Berechnung starten und Ergebnisse rendern
+        // Send request to backend
         fetch('/api/kurvendiskussion', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Rechenweg hinzufügen
+    // Handle rendering of step-by-step solution when button clicked
     document.getElementById('results-section').addEventListener('click', (event) => {
         if (event.target && event.target.classList.contains('rechenweg-button')) {
             const funktion = inputField.value;
@@ -155,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // Append rendered LaTeX step-by-step solution to results
     function appendRechenweg(data) {
     let rechenwegContainer = document.querySelector('.rechenweg-container');
     if (!rechenwegContainer) {
@@ -187,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+    // Optional: send request to generate a PDF from polynomial division (used internally)
     function performPolynomDivision(dividend, divisor) {
     fetch('/api/polynomdivision', {
         method: 'POST',
@@ -209,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 
 
-    // Funktion zum Rendern der Ergebnisse in speziellen Boxen
+    // Render results into collapsible containers based on type
     function renderResults(data, funktion) {
         const resultContainer = resultsSection.querySelector('.result-container');
         resultContainer.innerHTML = ''; // Ergebnisse zurücksetzen
