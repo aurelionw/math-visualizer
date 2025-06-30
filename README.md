@@ -2,6 +2,8 @@
 
 This repository contains a web application for interactive function analysis, including zero-crossings, extrema, inflection points, and end behavior. The tool is primarily aimed at educational and mathematical purposes.
 
+This tool allows users to analyze mathematical functions in an educational, visual and interactive way
+
 ## Features
 
 - Detects and plots:
@@ -58,3 +60,9 @@ Aurélio Nwamusse
 ## Disclaimer
 
 This tool is intended for educational use only. Please verify results in academic or professional contexts.
+
+
+## Project Status
+
+The current version is fully functional and demonstrates all core features, including symbolic analysis and derivtives.
+Additional enhancements and UI improvements are planned and will be finalized by **October 2025**.
