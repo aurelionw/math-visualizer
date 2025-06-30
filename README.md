@@ -24,7 +24,7 @@ This tool allows users to analyze mathematical functions in an educational, visu
 
 Below are a few screenshots to demonstrate the interface and functionality:
 
-## 📸 Screenshots
+## Screenshots
 
 <details>
   <summary>Click to expand screenshots</summary>
