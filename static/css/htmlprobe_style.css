@@ -1,4 +1,4 @@
-/* Grundlayout */
+/* Basic Layout */
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
@@ -11,7 +11,7 @@ body {
     color: #333;
 }
 
-/* Container für den gesamten Inhalt, sodass der Hinweis unten fixiert bleibt */
+/* Main content container – allows fixed footer */
 #content-container {
     display: flex;
     flex-direction: column;
@@ -19,10 +19,10 @@ body {
     justify-content: center;
     flex-grow: 1;
     width: 100%;
-    padding-bottom: 50px; /* Platz für den Hinweis am unteren Rand */
+    padding-bottom: 50px; /* space for fixed bottom hint */
 }
 
-/* Überschrift */
+/* Page headline */
 h1 {
     color: #333;
     text-align: center;
@@ -31,7 +31,7 @@ h1 {
     margin-bottom: 10px;
 }
 
-/* Spinner */
+/* Spinner animation */
 #loading img {
     animation: spin 1s linear infinite;
 }
@@ -41,7 +41,7 @@ h1 {
     to { transform: rotate(360deg); }
 }
 
-/* Ergebnisbereich */
+/* Result section */
 .results-container {
     width: 100%;
     max-width: 800px;
@@ -52,7 +52,7 @@ h1 {
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Ergebnisüberschrift */
+/* Result heading */
 .results-container h2 {
     text-align: center;
     color: black; /* Schwarze Farbe */
@@ -60,14 +60,14 @@ h1 {
     font-family: 'Roboto', sans-serif; /* Sans-Serif Schriftart */
 }
 
-/* Ergebniscontainer */
+/* Result container */
 .result-container {
     display: flex;
     flex-direction: column;
     gap: 20px; /* Abstand zwischen den Boxen */
 }
 
-/* Einzelne Ergebnisboxen */
+/* Individual result box */
 .result-box {
     padding: 15px;
     background-color: #ffffff;
@@ -80,7 +80,7 @@ h1 {
     flex-direction: column; /* Vertikales Layout */
 }
 
-/* Überschrift für die Ergebnisbox */
+/* Result box title */
 .result-box h3 {
     margin: 0;
     font-size: 1.5em; /* Größe der Überschrift */
@@ -90,7 +90,7 @@ h1 {
     padding-bottom: 15px; /* Abstand zwischen Überschrift und Inhalt */
 }
 
-/* Inhalt der Ergebnisbox */
+/* Content inside result box */
 .result-content {
     display: flex;
     justify-content: space-between;
@@ -98,7 +98,7 @@ h1 {
     margin-top: 15px; /* Abstand nach der Überschrift */
 }
 
-/* Buttons für Hilfe, Export und Berechnung */
+/* Buttons for help, export and calculation */
 .help-button, .export-button, .calculate-button {
     padding: 10px 15px;
     border: none;
@@ -114,7 +114,7 @@ h1 {
     transform: scale(1.05);
 }
 
-/* Spezieller Button für die Berechnung */
+/* Submit button styling */
 button[type="submit"] {
     padding: 10px 20px;
     border: none;
@@ -131,7 +131,7 @@ button[type="submit"]:hover {
     transform: scale(1.05);
 }
 
-/* Formular-Container */
+/* Form container */
 form {
     display: flex;
     flex-direction: column;
@@ -141,14 +141,14 @@ form {
     max-width: 800px;
 }
 
-/* Eingabefeld und Select Container */
+/* Input and select container */
 .input-container {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-/* Eingabefeld */
+/* Text input field */
 input[type="text"] {
     flex: 1;
     max-width: 600px;
@@ -163,7 +163,7 @@ input[type="text"] {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Anpassung für Select */
+/* Dropdown/select field */
 select {
     width: auto;
     padding: 10px 15px;
@@ -179,13 +179,13 @@ select {
     text-align: center;
 }
 
-/* Checkboxen-Stil */
+/* Checkbox button group */
 .checkbox-group {
     display: flex;
     gap: 20px;
 }
 
-/* Checkbox-Style als Button */
+/* Checkbox styled as buttons */
 .checkbox-button {
     display: inline-block;
     padding: 10px 8px;
@@ -209,7 +209,7 @@ select {
     box-shadow: 0 0 5px rgba(15, 107, 76, 0.5);
 }
 
-/* Hinweis-Style */
+/* Footer-style hint at the bottom */
 #hint {
     font-size: 0.9em;
     color: #555;
@@ -224,7 +224,7 @@ select {
     z-index: 10;
 }
 
-/* Akkordeon */
+/* Accordion style */
 details {
     margin: 10px;
     border: 1px solid #ccc;
@@ -238,7 +238,7 @@ summary {
     cursor: pointer;
 }
 
-/* Responsive Design */
+/* Responsive styling for small screens */
 @media (max-width: 768px) {
     body {
         padding: 10px;
@@ -261,25 +261,15 @@ summary {
 
 }
 
+/* Responsive styling for large screens */
 @media (min-width: 1200px) {
     .results-container {
         max-width: 1000px;
     }
 }
 
-/* LaTeX-Ausgabe-Box */
-/*.output-box {
-    width: 100%;
-    max-width: 600px;
-    padding: 15px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    background-color: #f7f8fa;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 25px;
-}
 
-/* Inhalt der LaTeX-Ausgabe */
+/* LaTeX output box  */
 .latex-content {
     width: 100%;
     max-width: 600px;
@@ -301,7 +291,7 @@ summary {
     box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.2); /* Leichter blau-töniger Schatten */
 }
 
-/* Zentrierte Ergebnisse */
+/* Centering of results */
 .results-container ul {
     list-style-type: none; /* Entfernt die Punkte */
     padding: 0; /* Entfernt zusätzlichen Innenabstand */
@@ -309,7 +299,6 @@ summary {
     text-align: center; /* Zentriert die Ergebnisse */
 }
 
-/* Zentrierte Listenelemente */
 .results-container ul li {
     display: inline-block; /* Macht jedes Ergebnis blockähnlich */
     margin-bottom: 10px; /* Abstand zwischen den Ergebnissen */
@@ -317,7 +306,7 @@ summary {
 }
 
 
-/* Dynamische Knöpfe: Rechenweg und Vereinfachen */
+/* Dynamic buttons for calculation and simplification */
 .dynamic-button {
     display: inline-block;
     padding: 10px 15px;
@@ -343,15 +332,8 @@ summary {
     box-shadow: 0 0 5px rgba(15, 107, 76, 0.5); /* Leichter grüner Glüheffekt */
 }
 
-/* Optional: Hover über einem aktiven Knopf */
-.dynamic-button.selected:hover {
-    background-color: #c2dfd3; /* Etwas dunkleres Grün */
-}
 
-
-
-
-/* Rechenweg-Stil */
+/* Styling for calculation explanation section */
 .rechenweg-container {
     margin-top: 20px;
     padding: 15px;
