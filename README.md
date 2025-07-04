@@ -76,4 +76,4 @@ This tool is intended for educational use only. Please verify results in academi
 
 The current version is mostly functional and already demonstrates key features such as symbolic analysis and derivative computation.
 The step-by-step solution display (via MathJax) is currently under review, as rendering still needs refinement.
-Further enhancements are planned, including UI improvements and multilingual support (English, Dutch, French, and Spanish), to be finalized by **October 2025**.
+Further enhancements are planned, including UI improvements and multilingual support (English, Dutch, French, Portuguese, and Spanish), to be finalized by **October 2025**.
