@@ -74,5 +74,6 @@ This tool is intended for educational use only. Please verify results in academi
 
 ## Project Status
 
-The current version is fully functional and demonstrates all core features, including symbolic analysis and derivtives.
-Additional enhancements and UI improvements are planned and will be finalized by **October 2025**.
+The current version is mostly functional and already demonstrates key features such as symbolic analysis and derivative computation.
+The step-by-step solution display (via MathJax) is currently under review, as rendering still needs refinement.
+Further enhancements and UI improvements are planned and will be finalized by**October 2025**.
